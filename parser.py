@@ -4,12 +4,15 @@ from bs4 import BeautifulSoup
 
 url = 'https://stavka.tv/predictions'
 
-def get_html(url: str) -> str:
-    response = requests.get(url)
-    return response.text
-
-def get_predict_data(html: str):
-    soup = BeautifulSoup(html, 'html.parser')
+def get_predict_data(predict_filter: dict):
+    if predict_filter['sport'] != 'Не указано':
+        url += f'/{predict_filter["sport"]}'
+    if predict_filter['k'] != 'Не указано':
+        url += f'?rateFrom={predict_filter["k"][0]}&rateTo={predict_filter["k"][1]}'
+    if predict_filter['date'] != 'Не указано':
+        url += f'?period={predict_filter["date"]}' if '?' not in url else f'&period={predict_filter["date"]}'
+    
+    soup = BeautifulSoup(requests.get(url).text, 'html.parser')
     
     match = soup.find('div', class_='PredictionsItem')
     
@@ -25,6 +28,3 @@ def get_predict_data(html: str):
     description = match.find('div', class_='prediction-text text-article').text
     
     return command_1, command_2, time, date, k, prediction, description
-
-html_content = get_html(url)
-print(get_predict_data(html_content))
