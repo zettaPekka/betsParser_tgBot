@@ -13,7 +13,6 @@ user_router = Router()
 
 
 def replace_filter_title(filters: dict) -> dict:
-    keys = list(filters.keys())
     current_filters = {}
     
     sport_parse = {
@@ -35,9 +34,9 @@ def replace_filter_title(filters: dict) -> dict:
         '2h': '2 часа'
     }
     
-    current_filters[keys[0]] = sport_parse[filters['sport']] if filters[keys[0]] != 'Не указано' else 'Не указано'
-    current_filters[keys[1]] = filters['k'] if filters[keys[1]] != '1-10' else ['1', '10']
-    current_filters[keys[2]] = date_parse[filters['date']] if filters[keys[2]] != 'Не указано' else 'Не указано'
+    current_filters['sport'] = sport_parse[filters['sport']] if filters['sport'] != 'Не указано' else 'Не указано'
+    current_filters['k'] = filters['k'] if filters['k'] != '1-10' else ['1', '10']
+    current_filters['date'] = date_parse[filters['date']] if filters['date'] != 'Не указано' else 'Не указано'
     return current_filters
 
 
